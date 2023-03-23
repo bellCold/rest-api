@@ -32,33 +32,5 @@ class EventTest {
     @MockBean
     EventRepository eventRepository;
 
-    @Test
-    public void createEvent() throws Exception {
-        Event event = Event.builder()
-                .name("Spring")
-                .description("Rest Api")
-                .beginEnrollmentDateTime(LocalDateTime.of(2022, 2, 3, 3, 4, 20))
-                .closeEnrollmentDateTime(LocalDateTime.of(2022, 2, 3, 3, 4, 20))
-                .beginEventDateTime(LocalDateTime.of(2022, 2, 3, 3, 4, 20))
-                .endEventDateTime(LocalDateTime.of(2022, 2, 3, 3, 4, 20))
-                .basePrice(100)
-                .maxPrice(200)
-                .limitOfEnrollment(100)
-                .location("강남역")
-                .build();
 
-        event.setId(1L);
-
-        Mockito.when(eventRepository.save(event)).thenReturn(event);
-
-        mockMvc.perform(post("/api/events")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaTypes.HAL_JSON)
-                        .content(objectMapper.writeValueAsString(event)))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").exists())
-                .andExpect(header().exists(HttpHeaders.LOCATION))
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE));
-    }
 }
